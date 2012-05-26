@@ -1,5 +1,6 @@
 -----
 title: Hello World
+description: A short post introducing Iceberg
 slug: hello-world
 layout: post
 -----

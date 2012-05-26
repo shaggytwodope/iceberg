@@ -1,2 +1,3 @@
 static: static
 index: index.html
+rss: feed.xml

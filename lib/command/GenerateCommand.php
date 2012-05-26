@@ -124,7 +124,8 @@ class GenerateCommand extends AbstractCommand {
 		$templateArray["post"]= end($postsClean);
 		$templateArray["general"] = array(
 			"path" => Config::getVal("general", "path"),
-			"title" => Config::getVal("general", "title")
+			"title" => Config::getVal("general", "title"),
+			"description" => Config::getVal("general", "description")
 		);
 	
 		foreach ($filesToCompile as $template => $output) {

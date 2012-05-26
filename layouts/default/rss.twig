@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>{{ general.title }} RSS Feed</title>
+		<description>{{ general.description }}</description>
+		<link>{{ general.path }}</link>
+		<atom:link href="{{ general.path }}/feed.xml" rel="self" type="application/rss+xml" />
+		<lastBuildDate>{{ post.info.time|date("D, d M Y H:i:s O") }}</lastBuildDate>
+		<pubDate>{{ post.info.time|date("D, d M Y H:i:s O") }}</pubDate>
+		<ttl>1800</ttl>
+		
+		{% for item in posts %}
+		<item>
+			<title>{{ item.info.title }}</title>
+			<description>{{ item.info.description }}</description>
+			<link>{{ general.path }}</link>
+			<guid>{{ general.path }}/article/{{ post.info.slug }}</guid>
+			<pubDate>{{ post.info.time|date("D, d M Y H:i:s O") }}</pubDate>
+		</item>
+		{% endfor %}
+	
+	</channel>
+</rss>
