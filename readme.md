@@ -47,6 +47,7 @@ To do that, open your favorite text editor, and create a new file with the follo
     -----
     title: This is my new post!
 	slug: this-is-my-new-post
+	description: My first post
     layout: post
     -----
     
@@ -58,6 +59,7 @@ That little chunk at the top of the file is very important. Here's a little desc
 + ``title`` : Simple enough, this will just be the title of your post
 + ``author`` : This one isn't on the example, but when enabled, it will override the "global author" which is set in the config.
 + ``slug`` : This will be the url of your post. Let's say your slug is ``this-is-my-new-post``, your post will appear at ``http://example.com/article/this-is-my-new-post``.
++ ``description`` : A short description of what the post is about. This line is used when generating the RSS feed for your posts.
 + ``layout`` : This is the name of the template you want to use for this specific post. You can read more about it in the **writting themes** section below.
 + **Others** : Yep, you can also have your custom values in there. Let's say you want to have a custom tag to use in one of your layouts -- you can set it there.
 
