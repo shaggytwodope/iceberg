@@ -119,7 +119,7 @@ class PostGenerateHook extends AbstractShellHook {
 	
 	/* This is the command you will want to run.                  */
 	/* Note that this can also be an array of (strings) commands. */
-	protected static $command = "mkdir example";
+	protected static $command = "touch test.txt";
 	
 	public static function prepare($posts) {
 		/* This function will be called before the actual command is run. */
