@@ -142,7 +142,7 @@ class GenerateCommand extends AbstractCommand {
 		if (is_dir($postAssets))
 			FileSystem::recursiveCopy($postAssets, $postAssetsOutput, true);
 		
-		echo "-> Successfully created \"" .$args[0]. "\" at \"$templateOutputPath\"", PHP_EOL;
+		echo "=> Generated article \"" .$args[0]. "\" at \"$templateOutputPath\"", PHP_EOL;
 		
 		if ($runHook)
 			Hook::call("postGenerate", $templateArray);
