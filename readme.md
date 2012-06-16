@@ -5,7 +5,7 @@ Iceberg is being developed by **[@cyrilmengin](http://twitter.com/cyrilmengin)**
 
 -----
 
-## Installing
+### Installing
 
 *Iceberg was built on PHP 5.3.8, however, any of the 5.3 versions should be fine.*
 
@@ -23,7 +23,7 @@ You should now have a directory with a ``data``, ``lib`` and ``layouts`` directo
 
 -----
 
-## Using Iceberg
+### Using Iceberg
 
 So, you've installed Iceberg. That wasn't too hard, but what now? Well, you'll want to create a new post of course!
 To do that, open your favorite text editor, and create a new file with the following:
@@ -66,7 +66,7 @@ $ ./iceberg generate this-is-my-new-post
 
 -----
 
-## Writing Themes
+### Writing Themes
 
 Writing themes with Iceberg is really easy. Iceberg uses [Twig](http://twig.sensiolabs.org/) for it's templating, so please refer to it's own documentation and the default template for information. Templates should have the ``.twig`` extension.
 
@@ -85,7 +85,7 @@ Note that you musn't add the ``.twig`` extension when declaring a template in th
 
 -----
 
-## Writing Hooks
+### Writing Hooks
 
 Iceberg has a hook feature, similar to git. Basically, hooks are scripts that will be run at specific moments during the execution of a command.
 They can be useful for (for example) uploading your new blog posts automatically, or compiling LESS / HAML / etc files.
@@ -98,7 +98,7 @@ Iceberg currently has the following hooks:
 + **postGenerate:** this hook is run after any compiling of posts is done. 
 
 To create a hook, simply create a file in the ``lib/hook`` directory, and put the corresponding code inside. The name of the hook should be the same as the file name, be ucfirst, and have "Hook" appended to it.
-All hooks should extend from either the ``AbstractShellHook`` class, if you want to run a command line script, or the ``AbstractCodeHook`` class, if you want a PHP code hook. For example:
+All hooks should extend from either the ``AbstractShellHook`` class if you want to run a command line script, or the ``AbstractCodeHook`` class if you want a pure PHP code hook. For example:
 
 ``lib/hook/PostGenerateHook.php``
 
@@ -151,13 +151,9 @@ class PreGenerateHook extends AbstractCodeHook {
 }
 ```
 
-(Both these examples are actually placeholder hooks, and they're already part of Iceberg, so you can refer to them / edit them right in the hooks directory.)
-
-On the other hand, if you'd like to stop any hooks from running during the execution of a command, simply append the ``--no-hook`` parameter to the command (see the manual file for more information).
-
 -----
 
-## Thanks & Credits
+### Thanks & Credits
 
 + **[Michel Fortin](https://github.com/michelf)** for the library used to parse Markdown.
 + **[SPYC](http://code.google.com/p/spyc/)** which is used for parsing YAML.
@@ -165,7 +161,7 @@ On the other hand, if you'd like to stop any hooks from running during the execu
 
 -----
 
-## License
+### License
 
 Iceberg is licensed under the [WTFPL](http://sam.zoy.org/wtfpl/COPYING) license, so go wild, do what you want.
 
