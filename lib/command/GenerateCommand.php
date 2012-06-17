@@ -118,7 +118,7 @@ class GenerateCommand extends AbstractCommand {
 				$postsClean[] = array("text" => str_replace('\n', "\n", html_entity_decode($posts[$i]["text"])),
 				                      "info" => get_object_vars(json_decode(stripslashes(html_entity_decode($posts[$i]["data"])))));
 		}
-		
+
 		$templateArray = array();
 		$templateArray["posts"] = $postsClean;
 		$templateArray["post"]= end($postsClean);
