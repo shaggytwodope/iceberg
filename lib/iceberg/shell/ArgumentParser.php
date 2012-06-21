@@ -3,6 +3,7 @@
 namespace iceberg\shell;
 
 use iceberg\shell\exceptions\InvalidArgumentPassedException;
+use iceberg\shell\exceptions\CommandArgumentNotGivenException;
 
 class ArgumentParser {
 
@@ -21,8 +22,13 @@ class ArgumentParser {
 		global $argc;
 
 		$parsedArguments = array();
+		
+		if ( !array_key_exists(1, $argv) )
+			throw new CommandArgumentNotGivenException("A command argument must be passed to use Iceberg.");
+		
+		$parsedArguments["command"] = $argv[1];
 
-		for ($i = 1; $i < $argc; $i++) {
+		for ($i = 2; $i < $argc; $i++) {
 		
 			if ( substr($argv[$i], 0, 2) == "--" ) {
 				$keyword = str_replace("-", "_", substr($argv[$i], 2));
@@ -36,8 +42,10 @@ class ArgumentParser {
 			} else 
 				throw new InvalidArgumentPassedException("Invalid argument \"{$argv[$i]}\" passed.");
 		}
-		
+
 		$this->arguments = $parsedArguments;
+		
+		var_dump($parsedArguments);
 	}
 	
 	public function __get($name) {
