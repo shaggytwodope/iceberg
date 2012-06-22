@@ -44,8 +44,6 @@ class ArgumentParser {
 		}
 
 		$this->arguments = $parsedArguments;
-		
-		var_dump($parsedArguments);
 	}
 	
 	public function __get($name) {
