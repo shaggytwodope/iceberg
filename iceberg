@@ -10,7 +10,7 @@ use iceberg\shell\ArgumentParser;
 
 define("ICEBERG_TIMEZONE", "Europe/Berlin");
 define("ICEBERG_LOG", "iceberg.log");
-define("ICEBERG_CONFIG", "iceberg.ini");
+define("ICEBERG_CONFIG", "config.ini");
 
 date_default_timezone_set(ICEBERG_TIMEZONE);
 
