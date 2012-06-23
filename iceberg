@@ -1,0 +1,26 @@
+#! /usr/bin/php
+<?php 
+
+include __DIR__."/lib/iceberg/Autoloader.php";
+
+use iceberg\Autoloader;
+use iceberg\ErrorHandler;
+use iceberg\config\Config;
+use iceberg\shell\ArgumentParser;
+
+define("ICEBERG_TIMEZONE", "Europe/Berlin");
+define("ICEBERG_LOG", "iceberg.log");
+define("ICEBERG_CONFIG", "iceberg.ini");
+
+date_default_timezone_set(ICEBERG_TIMEZONE);
+
+Autoloader::register();
+Autoloader::addNamespace("iceberg", __DIR__."/lib/iceberg");
+ErrorHandler::register(ICEBERG_LOG);
+
+$arguments = ArgumentParser::getInstance();
+
+if ($arguments->config_val)
+	Config::loadFromFile($arguments->config_val);
+else
+	Config::loadFromFile(ICEBERG_CONFIG);

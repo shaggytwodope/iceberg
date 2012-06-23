@@ -21,7 +21,7 @@ class ErrorHandler {
 	}
 
 	public static function log($name, $message, $log = false) {
-
+		
 		$logMessage = "[".date(DATE_RFC822)."]";
 		$logMessage .= " ".$name." ";
 		$logMessage .= ":";
