@@ -17,7 +17,7 @@ class Autoloader {
 		$set = spl_autoload_register(__CLASS__."::loadClass");
 
 		if (!$set)
-			throw new NoAutoloaderException("Unable to set the Iceberg autoloader.");
+			throw new NoAutoloaderException("Unable to register the Iceberg autoloader.");
 		else
 			static::$registered = true;
 		
@@ -35,7 +35,7 @@ class Autoloader {
 		$namespace = $pathBits[0];
 		
 		if (!array_key_exists($namespace, static::$namespaces))
-			throw new NamespaceNotSetException("Namespace \"{$pathBits[0]}\" has not been set.");
+			throw new NamespaceNotSetException("Namespace source for \"{$pathBits[0]}\" has not been set.");
 
 		$path = static::$namespaces[$namespace]
 		       .DIRECTORY_SEPARATOR

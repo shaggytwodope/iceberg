@@ -13,13 +13,13 @@ class Config {
 	public static function loadFromFile($path) {
 
 		if (!file_exists($path))
-			throw new ConfigFileNotFoundException("Config file at path \"$path\" not found.");
+			throw new ConfigFileNotFoundException("Config file \"$path\" not found.");
 
 		$configData = file_get_contents($path);
 		
 		$parsedConfig = parse_ini_string($configData, true);
 		if (!$parsedConfig)
-			throw new InvalidConfigFileException("Invalid or corrupted config file (path is \"$path\").");
+			throw new InvalidConfigFileException("Config file \"$path\" is invalid or corrupted.");
 
 		static::$values = $parsedConfig;
 	}
@@ -32,7 +32,7 @@ class Config {
 
 		if ( !isset(static::$values[$group][$key]) ) {
 			if ($exception)
-				throw new UnknownConfigValueException("Unknown config value \"$group.$key\".");
+				throw new UnknownConfigValueException("Required config value \"$group.$key\" not found.");
 			else 
 				return false;
 		}
