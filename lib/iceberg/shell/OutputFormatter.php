@@ -8,27 +8,16 @@ use iceberg\shell\exceptions\InvalidOutputStringException;
 class OutputFormatter {
 
 	public static $colours = array(
-		"black" => "0;30",
+		"black" => "0;30", 
 		"white" => "1;37",
-		"gray" => "1;30",
-		"lightGray" => "0;37",
-		"blue" => "0;34",
-		"lightBlue" => "1;34",
-		"green" => "0;32",
-		"lightGreen" => "1;32",
-		"cyan" => "0;36",
-		"lightCyan" => "1;36",
-		"red" => "0;31",
-		"lightRed" => "1;31",
-		"purple" => "0;35",
-		"lightPurple" => "1;35",
+		"gray" => "1;30", "lightGray" => "0;37",
+		"blue" => "0;34", "lightBlue" => "1;34",
+		"green" => "0;32", "lightGreen" => "1;32",
+		"cyan" => "0;36", "lightCyan" => "1;36",
+		"red" => "0;31", "lightRed" => "1;31",
+		"purple" => "0;35", "lightPurple" => "1;35",
 		"brown" => "0;33",
 		"yellow" => "1;33"
-	);
-	
-	private static $others = array(
-		"underline" => "4",
-		"reset" => "0"
 	);
 	
 	public static function __callStatic($name, $arguments) {
