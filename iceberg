@@ -2,10 +2,13 @@
 <?php
 
 include __DIR__."/lib/iceberg/Autoloader.php";
+include __DIR__."/lib/iceberg/ErrorHandler.php";
 
-use iceberg\hook\Hook;
 use iceberg\Autoloader;
 use iceberg\ErrorHandler;
+
+use iceberg\hook\Hook;
+use iceberg\cmd\Command;
 use iceberg\config\Config;
 use iceberg\shell\ArgumentParser;
 
@@ -15,10 +18,12 @@ define("ICEBERG_CONFIG", "config.ini");
 
 date_default_timezone_set(ICEBERG_TIMEZONE);
 
+ErrorHandler::register(ICEBERG_LOG);
+
 Autoloader::register();
 Autoloader::addNamespace("iceberg", __DIR__."/lib/iceberg");
 Autoloader::addNamespace("hooks", __DIR__."/hooks");
-ErrorHandler::register(ICEBERG_LOG);
+Autoloader::addNamespace("commands", __DIR__."/lib");
 
 $arguments = ArgumentParser::getInstance();
 
@@ -27,9 +32,12 @@ if ($arguments->config_val)
 else
 	Config::loadFromFile(ICEBERG_CONFIG);
 
-Hook::setNamespace("hooks\(hook)Hook");
+Hook::setNamespace("hooks\{hook}Hook");
 
 if ($arguments->no_hook)
 	Hook::setEnabled(false);
 else
 	Hook::setEnabled(true);
+	
+Command::setNamespace("commands\{command}");
+Command::call($arguments->command);

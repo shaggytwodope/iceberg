@@ -25,7 +25,7 @@ class Hook {
 		if (!static::$namespace)
 			throw new HooksNamespaceNotSetException("Hooks namespace was not set. Hooks not found.");
 		
-		$hook = str_replace("(hook)", ucfirst($hook), static::$namespace);
+		$hook = str_replace("{hook}", ucfirst($hook), static::$namespace);
 		$args = array_slice(func_get_args(), 1);
 		
 		$exists = @call_user_func("$hook::exists");

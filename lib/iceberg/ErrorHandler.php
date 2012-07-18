@@ -24,7 +24,7 @@ class ErrorHandler {
 		
 		$logMessage = "[".date(DATE_RFC822)."]";
 		$logMessage .= " ".$name." ";
-		$logMessage .= ":";
+		$logMessage .= ": ";
 		$logMessage .= $message;
 		$logMessage .= PHP_EOL;
 		
