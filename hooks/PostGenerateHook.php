@@ -4,7 +4,7 @@ namespace hooks;
 
 use iceberg\hook\AbstractHook;
 
-class PreGenerateHook extends AbstractHook {
+class PostGenerateHook extends AbstractHook {
 
 	public static $rootDir = __DIR__;
 
