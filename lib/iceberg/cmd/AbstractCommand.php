@@ -10,4 +10,10 @@ abstract class AbstractCommand {
 	
 	abstract public static function run();
 
+	public static function output() {
+		echo PHP_EOL;
+		foreach (static::$log as $log) echo $log, PHP_EOL;
+		echo PHP_EOL;
+	}
+
 }

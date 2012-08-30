@@ -31,7 +31,7 @@ class ErrorHandler {
 		if (static::$logPath && $log) 
 			fwrite(static::$logPath, $logMessage);
 		
-		echo $message . PHP_EOL;
+		echo "[!!] " . $message . PHP_EOL;
 	}
 
 	public static function exceptionHandler($exception) {

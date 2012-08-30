@@ -1,6 +1,5 @@
 @title: Hello World
 @author: Cyril Mengin
-@layout: post
 
 # Hello World
 
