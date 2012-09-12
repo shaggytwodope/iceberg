@@ -2,12 +2,16 @@
 
 namespace commands;
 
+use DateTime;
+use DateTimeZone;
+
 use iceberg\hook\Hook;
 use iceberg\config\Config;
 use iceberg\cmd\AbstractCommand;
 use iceberg\shell\ArgumentParser;
 use iceberg\shell\OutputFormatter;
 
+use iceberg\cmd\exceptions\InvalidInputException;
 use iceberg\cmd\exceptions\InputDataNotFoundException;
 use iceberg\cmd\exceptions\InputFileNotGivenException;
 
@@ -18,7 +22,7 @@ class Generate extends AbstractCommand {
 	public static function run() {
 		$arguments = ArgumentParser::getInstance();
 
-		static::$post["author"] = Config::getVal("general", "author");
+		static::$post["author"] = Config::getVal("general", "author", true);
 		
 		switch (true) {
 
@@ -27,7 +31,7 @@ class Generate extends AbstractCommand {
 				break;
 			
 			case $arguments->name_val:
-				$inputFilePath = str_replace("{article}", $arguments->name, Config::getVal("article", "source", true));
+				$inputFilePath = str_replace("{article}", $arguments->name, Config::getVal("article", "input", true));
 				break;
 			
 			default:
@@ -38,8 +42,10 @@ class Generate extends AbstractCommand {
 		$inputFileContent = @file_get_contents($inputFilePath);
 		if (!$inputFileContent)
 			throw new InputFileNotGivenException("Article file does not exist or could not be opened.");
+
+		static::$post["content"] = trim(preg_replace("/@([a-zA-Z]+):\s(.*)\n?/", "", $inputFileContent));
 		
-		preg_match_all("/@([a-zA-Z]+):\s(.*)/", $inputFileContent, $metadata, PREG_SET_ORDER);
+		preg_match_all("/@([a-zA-Z]+):\s(.*)\n?/", $inputFileContent, $metadata, PREG_SET_ORDER);
 		foreach ($metadata as $detail)
 			static::$post[$detail[1]] = $detail[2];
 
@@ -47,6 +53,19 @@ class Generate extends AbstractCommand {
 			if (!array_key_exists($required, static::$post))
 				throw new InputDataNotFoundException("Required metadata \"$required\" not found.");
 
+		if (array_key_exists("date", static::$post)) {
+
+			$timestamp = strtotime(static::$post["date"]);
+			if (!$timestamp)
+				throw new InvalidInputException("Invalid date metadata. Make sure the date metadata is a valid PHP date.");
+
+			static::$post["date"] = new DateTime("@$timestamp");
+			static::$post["date"]->setTimezone(new DateTimeZone(date_default_timezone_get()));
+
+		} else
+			static::$post["date"] = new DateTime();
+
+		var_dump(static::$post);
 	}
 
 }

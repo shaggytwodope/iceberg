@@ -11,12 +11,9 @@ use iceberg\hook\Hook;
 use iceberg\cmd\Command;
 use iceberg\config\Config;
 use iceberg\shell\ArgumentParser;
-
-define("ICEBERG_TIMEZONE", "Europe/Berlin");
+ 
 define("ICEBERG_LOG", __DIR__."/iceberg.log");
 define("ICEBERG_CONFIG", __DIR__."/config.ini");
-
-date_default_timezone_set(ICEBERG_TIMEZONE);
 
 ErrorHandler::register(ICEBERG_LOG);
 
@@ -31,6 +28,8 @@ if ($arguments->config_val)
 	Config::loadFromFile($arguments->config_val);
 else
 	Config::loadFromFile(ICEBERG_CONFIG);
+
+date_default_timezone_set(Config::getVal("general", "timezone", true));
 
 Hook::setNamespace("hooks\{hook}Hook");
 

@@ -40,7 +40,7 @@ class ErrorHandler {
 		if (static::$logPath) 
 			fclose(static::$logPath);
 
-		exit;
+		exit(1);
 	}
 
 }
