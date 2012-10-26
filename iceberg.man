@@ -1,0 +1,20 @@
+$ ./iceberg <command> [options]
+
+GLOBAL OPTIONS
+
+	--no-hook
+	--config <config path>
+
+COMMANDS & SPECIFIC OPTIONS
+
+	generate
+		--file <file path>
+		--name <post name>
+
+EXAMPLE USAGE
+
+	./iceberg \
+	generate \
+	--name hello-world \
+	--no-hook \
+	--config deploy.ini \
