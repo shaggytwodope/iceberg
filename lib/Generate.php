@@ -53,11 +53,15 @@ class Generate extends AbstractCommand {
 			if (!array_key_exists($required, static::$post))
 				throw new InputDataNotFoundException("Required metadata \"$required\" not found.");
 
+		if ( !array_key_exists("slug", static::$post) )
+				static::$post["slug"] = trim(static::$post["title"]);
+		static::$post["slug"] = strtolower(str_replace(" ", "-", preg_replace("/[^a-zA-Z0-9_\s]/", "", static::$post["slug"])));
+
 		if (array_key_exists("date", static::$post)) {
 
 			$timestamp = strtotime(static::$post["date"]);
 			if (!$timestamp)
-				throw new InvalidInputException("Invalid date metadata. Make sure the date metadata is a valid PHP date.");
+				throw new InvalidInputException("Invalid date metadata. Make sure the date is a valid PHP date.");
 
 			static::$post["date"] = new DateTime("@$timestamp");
 			static::$post["date"]->setTimezone(new DateTimeZone(date_default_timezone_get()));
@@ -65,7 +69,7 @@ class Generate extends AbstractCommand {
 		} else
 			static::$post["date"] = new DateTime();
 
-		var_dump(static::$post);
+		print_r(static::$post);
 	}
 
 }
