@@ -32,8 +32,6 @@ class Command {
 		Hook::call("Pre" . ucfirst($command));
 		call_user_func("$call::run", $args);
 		Hook::call("Post" . ucfirst($command));
-		
-		call_user_func("$call::output");
 	}
 
 }

@@ -1,6 +1,9 @@
 #! /usr/bin/php
 <?php
 
+define("ICEBERG_LOG", __DIR__."/iceberg.log");
+define("ICEBERG_CONFIG", __DIR__."/config.ini");
+
 include __DIR__."/lib/iceberg/Autoloader.php";
 include __DIR__."/lib/iceberg/ErrorHandler.php";
 
@@ -11,9 +14,9 @@ use iceberg\hook\Hook;
 use iceberg\cmd\Command;
 use iceberg\config\Config;
 use iceberg\shell\ArgumentParser;
- 
-define("ICEBERG_LOG", __DIR__."/iceberg.log");
-define("ICEBERG_CONFIG", __DIR__."/config.ini");
+
+if (!ini_get('date.timezone'))
+	date_default_timezone_set("Europe/Berlin");
 
 ErrorHandler::register(ICEBERG_LOG);
 
@@ -24,19 +27,14 @@ Autoloader::addNamespace("commands", __DIR__."/lib");
 
 $arguments = ArgumentParser::getInstance();
 
-if ($arguments->config_val)
-	Config::loadFromFile($arguments->config_val);
-else
-	Config::loadFromFile(ICEBERG_CONFIG);
+Config::loadFromFile($arguments->config_val ? $arguments->config_val : ICEBERG_CONFIG);
 
 date_default_timezone_set(Config::getVal("general", "timezone", true));
 
 Hook::setNamespace("hooks\{hook}Hook");
 
-if ($arguments->no_hook)
+if ($arguments->no_hook) 
 	Hook::setEnabled(false);
-else
-	Hook::setEnabled(true);
 	
 Command::setNamespace("commands\{command}");
-Command::call($arguments->command);
+Command::call($argv[1]);

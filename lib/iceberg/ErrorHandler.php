@@ -11,17 +11,16 @@ class ErrorHandler {
 		if (!static::$registered)
 			static::$registered = set_exception_handler(__CLASS__."::exceptionHandler");
 	
-		if (!$logPath)
-			static::$logPath = false;
-
-		$file = @fopen($logPath, "a+");
-		static::$logPath = (!$file) ? false : $file;
+		if ($logPath) {
+			$file = @fopen($logPath, "a+");
+			static::$logPath = (!$file) ? false : $file;
+		}
 		
 		return static::$registered;
 	}
 
 	public static function log($name, $message, $log = false) {
-		
+
 		$logMessage = "[".date(DATE_RFC822)."]";
 		$logMessage .= " ".$name." ";
 		$logMessage .= ": ";

@@ -23,10 +23,8 @@ class ArgumentParser {
 
 		$parsedArguments = array();
 		
-		if ( !array_key_exists(1, $argv) )
+		if ( $argc < 2 || substr($argv[1], 0, 2) == "--")
 			throw new CommandArgumentNotGivenException("A command argument must be passed to use Iceberg.");
-		
-		$parsedArguments["command"] = $argv[1];
 
 		for ($i = 2; $i < $argc; $i++) {
 		
