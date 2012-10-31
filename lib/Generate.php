@@ -69,10 +69,20 @@ class Generate extends AbstractCommand {
 		} else
 			static::$post["date"] = new DateTime();
 
-		if ($arguments->output_val)
-			$outputFilePath = $arguments->output;
-		else
-			$outputFilePath = str_replace("{slug}", static::$post["slug"], Config::getVal("article", "output", true));
+		switch (true) {
+
+			case $arguments->output_val:
+				$outputFilePath = $arguments->output;
+				break;
+
+			case array_key_exists("output", static::$post):
+				$outputFilePath = static::$post["output"];
+				break;
+
+			default:
+				$outputFilePath = str_replace("{slug}", static::$post["slug"], Config::getVal("article", "output", true));
+				break;
+		}
 
 		$outputFileDirectory = dirname($outputFilePath);
 		@mkdir($outputFileDirectory, 0777, true);

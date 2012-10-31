@@ -16,6 +16,6 @@ EXAMPLE USAGE
 	./iceberg \
 	generate \
 	--name hello-world \
-	--output greeting-world.html
+	--output greeting-world.html \
 	--no-hook \
 	--config deploy.ini \
