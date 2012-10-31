@@ -8,13 +8,14 @@ GLOBAL OPTIONS
 COMMANDS & SPECIFIC OPTIONS
 
 	generate
-		--file <file path>
-		--name <post name>
+		--file <file path> || --name <post name>
+		[--output <output path]
 
 EXAMPLE USAGE
 
 	./iceberg \
 	generate \
 	--name hello-world \
+	--output greeting-world.html
 	--no-hook \
 	--config deploy.ini \
