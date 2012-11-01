@@ -10,6 +10,5 @@ COMMANDS & SPECIFIC OPTIONS
 
 GLOBAL OPTIONS
 
-		--no-hook
 		--version
 		--config <config path>

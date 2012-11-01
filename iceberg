@@ -11,7 +11,6 @@ include __DIR__."/lib/iceberg/ErrorHandler.php";
 use iceberg\Autoloader;
 use iceberg\ErrorHandler;
 
-use iceberg\hook\Hook;
 use iceberg\cmd\Command;
 use iceberg\config\Config;
 use iceberg\shell\ArgumentParser;
@@ -23,7 +22,6 @@ ErrorHandler::register(ICEBERG_LOG);
 
 Autoloader::register();
 Autoloader::addNamespace("iceberg", __DIR__."/lib/iceberg");
-Autoloader::addNamespace("hooks", __DIR__."/hooks");
 Autoloader::addNamespace("commands", __DIR__."/lib");
 
 $arguments = ArgumentParser::getInstance();
@@ -31,11 +29,6 @@ $arguments = ArgumentParser::getInstance();
 Config::loadFromFile($arguments->config_val ? $arguments->config_val : ICEBERG_CONFIG);
 
 date_default_timezone_set(Config::getVal("general", "timezone", true));
-
-Hook::setNamespace("hooks\{hook}Hook");
-
-if ($arguments->no_hook) 
-	Hook::setEnabled(false);
 
 if ($arguments->version)
 	echo ICEBERG_VERSION, PHP_EOL;

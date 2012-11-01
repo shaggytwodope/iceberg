@@ -2,7 +2,6 @@
 
 namespace iceberg\cmd;
 
-use iceberg\hook\Hook;
 use iceberg\ClassNotFoundException as NoClass;
 use iceberg\cmd\exceptions\CommandNamespaceNotSetException;
 use iceberg\cmd\exceptions\CommandDoesNotExistException;
@@ -28,10 +27,8 @@ class Command {
 		} catch (NoClass $e) {
 			throw new CommandDoesNotExistException("Command \"$command\" does not exist.");
 		}
-		
-		Hook::call("Pre" . ucfirst($command));
+
 		call_user_func("$call::run", $args);
-		Hook::call("Post" . ucfirst($command));
 	}
 
 }
