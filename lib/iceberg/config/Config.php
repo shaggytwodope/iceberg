@@ -11,7 +11,6 @@ class Config {
 	private static $values = array();
 
 	public static function loadFromFile($path) {
-
 		if (!file_exists($path))
 			throw new ConfigFileNotFoundException("Config file \"$path\" not found.");
 
@@ -29,7 +28,6 @@ class Config {
 	}
 
 	public static function getVal($group, $key, $exception = false) {
-
 		if ( !isset(static::$values[$group][$key]) ) {
 			if ($exception)
 				throw new UnknownConfigValueException("Required config value \"$group.$key\" not found.");

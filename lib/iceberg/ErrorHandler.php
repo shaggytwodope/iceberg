@@ -20,23 +20,18 @@ class ErrorHandler {
 	}
 
 	public static function log($name, $message, $log = false) {
-
-		$logMessage = "[".date(DATE_RFC822)."]";
-		$logMessage .= " ".$name." ";
-		$logMessage .= ": ";
-		$logMessage .= $message;
-		$logMessage .= PHP_EOL;
+		$logMessage = "[".date(DATE_RFC822)."] {$name} : {$message}\n";
 		
-		if (static::$logPath && $log) 
+		if (static::$logPath && $log)
 			fwrite(static::$logPath, $logMessage);
 		
-		echo "[!!] " . $message . PHP_EOL;
+		echo $message, PHP_EOL;
 	}
 
 	public static function exceptionHandler($exception) {
 		static::log( get_class($exception), $exception->getMessage(), true );
 
-		if (static::$logPath) 
+		if (static::$logPath)
 			fclose(static::$logPath);
 
 		exit(1);

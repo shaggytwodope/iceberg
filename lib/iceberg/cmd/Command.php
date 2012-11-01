@@ -15,7 +15,6 @@ class Command {
 	}
 	
 	public static function call($command) {
-	
 		if (!static::$namespace)
 			throw new CommandNamespaceNotSetException("Command namespace was not set. Command not found.");
 		

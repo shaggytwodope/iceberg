@@ -1,7 +1,7 @@
 #! /usr/bin/php
 <?php
 
-define("ICEBERG_VERSION", "Iceberg 2 - Development Version");
+define("ICEBERG_VERSION", "iceberg version 2.0");
 define("ICEBERG_LOG", __DIR__."/iceberg.log");
 define("ICEBERG_CONFIG", __DIR__."/config.ini");
 
