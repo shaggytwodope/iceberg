@@ -23,10 +23,12 @@ class ArgumentParser {
 
 		$parsedArguments = array();
 		
-		if ( $argc < 2 || substr($argv[1], 0, 2) == "--")
-			throw new CommandArgumentNotGivenException("A command argument must be passed to use Iceberg.");
+		if ($argc < 2)
+			throw new CommandArgumentNotGivenException("An argument must be passed to use Iceberg.");
 
-		for ($i = 2; $i < $argc; $i++) {
+		$i = substr($argv[1], 0, 2) != "--" ? 2 : 1;
+
+		for (; $i < $argc; $i++) {
 		
 			if ( substr($argv[$i], 0, 2) == "--" ) {
 				$keyword = str_replace("-", "_", substr($argv[$i], 2));

@@ -1,6 +1,7 @@
 #! /usr/bin/php
 <?php
 
+define("ICEBERG_VERSION", "Iceberg 2 - Development Version");
 define("ICEBERG_LOG", __DIR__."/iceberg.log");
 define("ICEBERG_CONFIG", __DIR__."/config.ini");
 
@@ -35,6 +36,10 @@ Hook::setNamespace("hooks\{hook}Hook");
 
 if ($arguments->no_hook) 
 	Hook::setEnabled(false);
-	
+
+if ($arguments->version)
+	echo ICEBERG_VERSION, PHP_EOL;
+
 Command::setNamespace("commands\{command}");
-Command::call($argv[1]);
+if (substr($argv[1], 0, 2) != "--")
+	Command::call($argv[1]);

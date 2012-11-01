@@ -24,7 +24,7 @@ class Command {
 		$args = array_slice(func_get_args(), 1);
 		
 		try {
-			@call_user_func("$call::exists");
+			call_user_func("$call::exists");
 		} catch (NoClass $e) {
 			throw new CommandDoesNotExistException("Command \"$command\" does not exist.");
 		}
