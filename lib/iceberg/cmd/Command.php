@@ -2,7 +2,7 @@
 
 namespace iceberg\cmd;
 
-use iceberg\ClassNotFoundException as NoClass;
+use iceberg\ClassNotFoundException;
 use iceberg\cmd\exceptions\CommandNamespaceNotSetException;
 use iceberg\cmd\exceptions\CommandDoesNotExistException;
 
@@ -23,7 +23,7 @@ class Command {
 		
 		try {
 			call_user_func("$call::exists");
-		} catch (NoClass $e) {
+		} catch (ClassNotFoundException $e) {
 			throw new CommandDoesNotExistException("Command \"$command\" does not exist.");
 		}
 
