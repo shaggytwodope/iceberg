@@ -2,9 +2,6 @@
 
 namespace commands;
 
-use DateTime;
-use DateTimeZone;
-
 use iceberg\hook\Hook;
 use iceberg\config\Config;
 use iceberg\cmd\AbstractCommand;
@@ -21,8 +18,6 @@ class Generate extends AbstractCommand {
 
 	public static function run() {
 		$arguments = ArgumentParser::getInstance();
-
-		static::$post["author"] = Config::getVal("general", "author", true);
 		
 		switch (true) {
 
@@ -38,36 +33,6 @@ class Generate extends AbstractCommand {
 				throw new InputFileNotGivenException("Article file name or path was not given.");
 				break;
 		}
-		
-		$inputFileContent = @file_get_contents($inputFilePath);
-		if (!$inputFileContent)
-			throw new InputFileNotGivenException("Article file does not exist or could not be opened.");
-
-		static::$post["content"] = trim(preg_replace("/@([a-zA-Z]+):\s(.*)\n?/", "", $inputFileContent));
-		
-		preg_match_all("/@([a-zA-Z]+):\s(.*)\n?/", $inputFileContent, $metadata, PREG_SET_ORDER);
-		foreach ($metadata as $detail)
-			static::$post[$detail[1]] = $detail[2];
-
-		foreach (array("title") as $required)
-			if (!array_key_exists($required, static::$post))
-				throw new InputDataNotFoundException("Required metadata \"$required\" not found.");
-
-		if ( !array_key_exists("slug", static::$post) )
-				static::$post["slug"] = trim(static::$post["title"]);
-		static::$post["slug"] = strtolower(str_replace(" ", "-", preg_replace("/[^a-zA-Z0-9_\s]/", "", static::$post["slug"])));
-
-		if (array_key_exists("date", static::$post)) {
-
-			$timestamp = strtotime(static::$post["date"]);
-			if (!$timestamp)
-				throw new InvalidInputException("Invalid date metadata. Make sure the date is a valid PHP date.");
-
-			static::$post["date"] = new DateTime("@$timestamp");
-			static::$post["date"]->setTimezone(new DateTimeZone(date_default_timezone_get()));
-
-		} else
-			static::$post["date"] = new DateTime();
 
 		switch (true) {
 
@@ -83,6 +48,37 @@ class Generate extends AbstractCommand {
 				$outputFilePath = str_replace("{slug}", static::$post["slug"], Config::getVal("article", "output", true));
 				break;
 		}
+		
+		$inputFileContent = @file_get_contents($inputFilePath);
+		if (!$inputFileContent)
+			throw new InputFileNotGivenException("Article file does not exist or could not be opened.");
+
+		static::$post["author"] = Config::getVal("general", "author", true);
+		static::$post["content"] = trim(preg_replace("/@([a-zA-Z]+):\s(.*)\n?/", "", $inputFileContent));
+		
+		preg_match_all("/@([a-zA-Z]+):\s(.*)\n?/", $inputFileContent, $metadata, PREG_SET_ORDER);
+		foreach ($metadata as $detail)
+			static::$post[$detail[1]] = $detail[2];
+
+		foreach (array("title") as $required)
+			if (!array_key_exists($required, static::$post))
+				throw new InputDataNotFoundException("Required metadata \"{$required}\" not found.");
+
+		if ( !array_key_exists("slug", static::$post) )
+				static::$post["slug"] = trim(static::$post["title"]);
+		static::$post["slug"] = strtolower(str_replace(" ", "-", preg_replace("/[^a-zA-Z0-9_\s]/", "", static::$post["slug"])));
+
+		if (array_key_exists("date", static::$post)) {
+
+			$timestamp = strtotime(static::$post["date"]);
+			if (!$timestamp)
+				throw new InvalidInputException("Invalid date metadata. Make sure the date is a valid PHP date.");
+
+			static::$post["date"] = new \DateTime("@$timestamp");
+			static::$post["date"]->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+
+		} else
+			static::$post["date"] = new DateTime();
 
 		$outputFileDirectory = dirname($outputFilePath);
 		@mkdir($outputFileDirectory, 0777, true);
