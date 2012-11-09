@@ -18,11 +18,11 @@ class Command {
 		if (!static::$namespace)
 			throw new CommandNamespaceNotSetException("Command namespace was not set. Command not found.");
 		
-		$call = str_replace("{command}", ucfirst($command), static::$namespace);
+		$call = str_replace("{command}", ucfirst(trim($command)), static::$namespace);
 		$args = array_slice(func_get_args(), 1);
 		
 		try {
-			call_user_func("$call::exists");
+			@call_user_func("$call::exists");
 		} catch (ClassNotFoundException $e) {
 			throw new CommandDoesNotExistException("Command \"$command\" does not exist.");
 		}

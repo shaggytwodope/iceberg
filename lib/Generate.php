@@ -2,7 +2,6 @@
 
 namespace commands;
 
-use iceberg\hook\Hook;
 use iceberg\config\Config;
 use iceberg\cmd\AbstractCommand;
 use iceberg\shell\ArgumentParser;
@@ -37,7 +36,7 @@ class Generate extends AbstractCommand {
 		$article = new \stdClass;
 		$article->author = Config::getVal("general", "author", true);
 		$article->content = trim(preg_replace("/@([a-zA-Z]+):\s(.*)\n?/", "", $inputFileContent));
-		
+
 		preg_match_all("/@([a-zA-Z]+):\s(.*)\n?/", $inputFileContent, $metadata, PREG_SET_ORDER);
 		foreach ($metadata as $detail)
 			$article->$detail[1] = trim($detail[2]);
