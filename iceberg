@@ -1,7 +1,7 @@
 #! /usr/bin/php
 <?php
 
-define("ICEBERG_VERSION", "iceberg version 2.0");
+define("ICEBERG_VERSION", " dev");
 define("ICEBERG_LOG", __DIR__."/iceberg.log");
 define("ICEBERG_CONFIG", __DIR__."/config.ini");
 
@@ -15,8 +15,9 @@ use iceberg\cmd\Command;
 use iceberg\config\Config;
 use iceberg\shell\ArgumentParser;
 
-if (!ini_get('date.timezone'))
+if (!ini_get('date.timezone')) {
 	date_default_timezone_set("Europe/Berlin");
+}
 
 ErrorHandler::register(ICEBERG_LOG);
 
@@ -30,9 +31,12 @@ Config::loadFromFile($arguments->config_val ? $arguments->config_val : ICEBERG_C
 
 date_default_timezone_set(Config::getVal("general", "timezone", true));
 
-if ($arguments->version)
-	echo ICEBERG_VERSION, PHP_EOL;
+if ($arguments->version) {
+	echo "Iceberg development release from github/cyrilmengin/iceberg.", PHP_EOL;
+}
 
 Command::setNamespace("commands\{command}");
-if (substr($argv[1], 0, 2) != "--")
+
+if (substr($argv[1], 0, 2) != "--") {
 	Command::call($argv[1]);
+}

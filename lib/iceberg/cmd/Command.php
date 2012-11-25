@@ -11,12 +11,15 @@ class Command {
 	private static $namespace = false;
 	
 	public static function setNamespace($namespace) {
+
 		static::$namespace = $namespace;
 	}
 	
 	public static function call($command) {
-		if (!static::$namespace)
+
+		if (!static::$namespace) {
 			throw new CommandNamespaceNotSetException("Command namespace was not set. Command not found.");
+		}
 		
 		$call = str_replace("{command}", ucfirst(trim($command)), static::$namespace);
 		$args = array_slice(func_get_args(), 1);
@@ -24,7 +27,7 @@ class Command {
 		try {
 			@call_user_func("$call::exists");
 		} catch (ClassNotFoundException $e) {
-			throw new CommandDoesNotExistException("Command \"$command\" does not exist.");
+			throw new CommandDoesNotExistException("Command \"{$command}\" does not exist.");
 		}
 
 		call_user_func("$call::run", $args);

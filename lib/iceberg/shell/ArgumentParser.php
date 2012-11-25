@@ -11,59 +11,67 @@ class ArgumentParser {
 	private static $object = false;
 
 	public static function getInstance() {
-		if (!static::$object)
+
+		if (!static::$object) {
 			static::$object = new ArgumentParser();
+		}
 
 		return static::$object;
 	}
 
 	private function __construct() {
+
 		global $argv;
 		global $argc;
 
 		$parsedArguments = array();
 		
-		if ($argc < 2)
+		if ($argc < 2) {
 			throw new CommandArgumentNotGivenException("An argument must be passed to use Iceberg.");
+		}
 
 		$i = substr($argv[1], 0, 2) != "--" ? 2 : 1;
 
 		for (; $i < $argc; $i++) {
 		
-			if ( substr($argv[$i], 0, 2) == "--" ) {
+			if (substr($argv[$i], 0, 2) == "--") {
 				$keyword = str_replace("-", "_", substr($argv[$i], 2));
 	
-				if ( $i+1 != $argc && substr($argv[$i+1], 0, 2) != "--" )
+				if ( $i+1 != $argc && substr($argv[$i+1], 0, 2) != "--" ) {
 					$value = $argv[++$i];
-				else
+				 } else {
 					$value = true;
+				}
 					
 				$parsedArguments[$keyword] = $value;
-			} else 
+			} else {
 				throw new InvalidArgumentPassedException("Invalid argument \"{$argv[$i]}\" passed.");
+			}
 		}
 
 		$this->arguments = $parsedArguments;
 	}
 	
 	public function __get($name) {
-		
+
 		if (substr($name, -4) != "_val") {
 		
-			if ( array_key_exists($name, $this->arguments) )
+			if (array_key_exists($name, $this->arguments)) {
 				return $this->arguments[$name];
-			else 
+			} else {
 				return false;
+			}
 	
 		} else {
-			$name = substr($name, 0, -4);		
+			$name = substr($name, 0, -4);
 
-			if ( array_key_exists($name, $this->arguments) )	
+			if (array_key_exists($name, $this->arguments)) {
 				return is_string($this->arguments[$name]) ? $this->arguments[$name] : false;
-			else 
+			} else {
 				return false;
+			}
+
 		}
 	}
 
 }
-
