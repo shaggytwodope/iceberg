@@ -21,7 +21,7 @@ class ErrorHandler {
 		return static::$registered;
 	}
 
-	public static function log($name, $message, $log = false) {
+	public static function log($name, $message) {
 
 		$logMessage = "[".date(DATE_RFC822)."] {$name} : {$message}\n";
 		
@@ -34,7 +34,7 @@ class ErrorHandler {
 
 	public static function exceptionHandler($exception) {
 
-		static::log( get_class($exception), $exception->getMessage(), true );
+		static::log(get_class($exception), $exception->getMessage());
 
 		if (static::$logPath) {
 			fclose(static::$logPath);

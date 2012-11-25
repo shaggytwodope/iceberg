@@ -37,7 +37,7 @@ class ArgumentParser {
 			if (substr($argv[$i], 0, 2) == "--") {
 				$keyword = str_replace("-", "_", substr($argv[$i], 2));
 	
-				if ( $i+1 != $argc && substr($argv[$i+1], 0, 2) != "--" ) {
+				if ($i+1 != $argc && substr($argv[$i+1], 0, 2) != "--") {
 					$value = $argv[++$i];
 				 } else {
 					$value = true;

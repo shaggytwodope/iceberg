@@ -1,7 +1,6 @@
 #! /usr/bin/php
 <?php
 
-define("ICEBERG_VERSION", " dev");
 define("ICEBERG_LOG", __DIR__."/iceberg.log");
 define("ICEBERG_CONFIG", __DIR__."/config.ini");
 
