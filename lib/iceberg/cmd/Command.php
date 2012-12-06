@@ -2,6 +2,7 @@
 
 namespace iceberg\cmd;
 
+use iceberg\hook\Hook;
 use iceberg\ClassNotFoundException;
 use iceberg\cmd\exceptions\CommandNamespaceNotSetException;
 use iceberg\cmd\exceptions\CommandDoesNotExistException;
@@ -17,11 +18,13 @@ class Command {
 	
 	public static function call($command) {
 
+		$command = strtolower(trim($command));
+
 		if (!static::$namespace) {
 			throw new CommandNamespaceNotSetException("Command namespace was not set. Command not found.");
 		}
 		
-		$call = str_replace("{command}", ucfirst(trim($command)), static::$namespace);
+		$call = str_replace("{command}", ucfirst($command), static::$namespace);
 		$args = array_slice(func_get_args(), 1);
 		
 		try {
@@ -30,7 +33,9 @@ class Command {
 			throw new CommandDoesNotExistException("Command \"{$command}\" does not exist.");
 		}
 
+		Hook::runEvent("pre-{$command}");
 		call_user_func("$call::run", $args);
+		Hook::runEvent("post-{$command}");
 	}
 
 }

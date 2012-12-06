@@ -12,3 +12,4 @@ GLOBAL OPTIONS
 
 		--version
 		--config <config path>
+		--no-hook [<hook name[, ...]>]
