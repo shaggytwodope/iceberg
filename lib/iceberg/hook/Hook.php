@@ -36,15 +36,21 @@ class Hook {
 		}
 	}
 
-	public static function runEvent($eventName) {
+	public static function runEvent($event) {
 
-		if (!static::$enabled 
-		 || !array_key_exists($eventName, static::$events)
-		 || in_array($eventName, static::$ignore)) {
+		if (!static::$enabled) {
 			return;
 		}
 
-		foreach (static::$events[$eventName] as $hook) {
+		if (!array_key_exists($event, static::$events)) {
+			return;
+		}
+
+		if (in_array($event, static::$ignore)) {
+			return;
+		}
+
+		foreach (static::$events[$event] as $hook) {
 			
 			if (in_array($hook, static::$ignore)) {
 				continue;

@@ -1,5 +1,0 @@
-#! /bin/sh
-
-# This is an example hook file, that will be run on 
-# the pre-generate event. Read the documentation for 
-# more information on how to use and building hooks.
