@@ -7,6 +7,7 @@ COMMANDS & SPECIFIC OPTIONS
 	generate
 		--file <file path> || --name <post name>
 		[--output <output path>]
+		[--layout <layout name>]
 
 GLOBAL OPTIONS
 

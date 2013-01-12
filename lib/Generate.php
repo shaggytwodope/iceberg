@@ -5,6 +5,9 @@ namespace commands;
 use DateTime;
 use DateTimeZone;
 
+use Twig_Environment;
+use Twig_Loader_Filesystem;
+
 use iceberg\config\Config;
 use iceberg\cmd\AbstractCommand;
 use iceberg\shell\ArgumentParser;
@@ -12,6 +15,9 @@ use iceberg\shell\ArgumentParser;
 use iceberg\cmd\exceptions\InvalidInputException;
 use iceberg\cmd\exceptions\InputDataNotFoundException;
 use iceberg\cmd\exceptions\InputFileNotGivenException;
+
+use iceberg\layout\exceptions\LayoutNotGivenException;
+use iceberg\layout\exceptions\LayoutFileDoesNotExistException;
 
 class Object { }
 class Generate extends AbstractCommand {
@@ -74,7 +80,7 @@ class Generate extends AbstractCommand {
 				$outputFilePath = $arguments->output;
 				break;
 
-			case isset($tempPost->output):
+			case isset($article->output):
 				$outputFilePath = $article->output;
 				break;
 
@@ -83,6 +89,35 @@ class Generate extends AbstractCommand {
 				break;
 		}
 		@mkdir(dirname($outputFilePath), 0777, true);
+
+		switch (true) {
+
+			case $arguments->layout_val:
+				$layoutFile = $argument->layout;
+				break;
+
+			case isset($article->layout):
+				$layoutFile = $article->layout;
+				break;
+
+			default:
+				throw new LayoutNotGivenException("Layout to be used was not given.");
+				break;
+
+		}
+
+		$layoutFilePath = str_replace("{layout}", $layoutFile, Config::getVal("article", "layout", true));
+		if (!file_exists($layoutFilePath)) {
+			throw new LayoutFileDoesNotExistException("Layout file does not exist.");
+		}
+
+		$layoutDirectory = dirname($layoutFilePath);
+		$layoutLoader = new Twig_Loader_Filesystem($layoutDirectory);
+
+		$layoutParser = new Twig_Environment($layoutLoader);
+		$layoutRendered = $layoutParser->render(end(explode("/", $layoutFilePath)), (array) $article);
+
+		file_put_contents($outputFilePath, $layoutRendered);
 	}
 
 }
