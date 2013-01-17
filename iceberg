@@ -35,10 +35,6 @@ Config::loadFromFile($args->config_val ? $args->config_val : __DIR__."/".ICEBERG
 
 date_default_timezone_set(Config::getVal("general", "timezone", true));
 
-if ($args->version) {
-	echo "Iceberg development release from github/cyrilmengin/iceberg.", PHP_EOL;
-}
-
 Hook::loadFromFile(__DIR__."/".ICEBERG_HOOK);
 if ($args->no_hook && !$args->no_hook_val) {
 	Hook::disableAll();
