@@ -1,6 +1,7 @@
 {
 	"example-hook": {
 		"path": "lib/hooks/example-hook",
-		"event": "pre-generate"
+		"event": "pre-generate",
+		"data": []
 	}
 }

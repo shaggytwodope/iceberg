@@ -2,6 +2,7 @@
 
 namespace iceberg\hook;
 
+use iceberg\hook\HookElement;
 use iceberg\hook\exceptions\InvalidHooksFileException;
 use iceberg\hook\exceptions\HookNotFoundException;
 
@@ -11,7 +12,6 @@ class Hook {
 
 	public static $events = array();
 	public static $hooks = array();
-	public static $ignore = array();
 
 	public static function loadFromFile($filePath) {
 
@@ -31,54 +31,52 @@ class Hook {
 				throw new InvalidHooksFileException("Hook data file is incomplete for \"{$name}\".");
 			}
 			
-			static::$hooks[$name] = $hook->path;
-			static::$events[$hook->event][] = $name;
+			static::$hooks[$name] = new HookElement($name, $hook->event, $hook->path);
+			if ($hook->data) {
+				static::$hooks[$name]->data = (array) $hook->data;
+			}
+
+			static::$events[$hook->event][] = &static::$hooks[$name];
 		}
 	}
 
 	public static function runEvent($event) {
 
-		if (!static::$enabled) {
-			return;
-		}
-
-		if (!array_key_exists($event, static::$events)) {
-			return;
-		}
-
-		if (in_array($event, static::$ignore)) {
+		if (!static::$enabled || !array_key_exists($event, static::$events)) {
 			return;
 		}
 
 		foreach (static::$events[$event] as $hook) {
 			
-			if (in_array($hook, static::$ignore)) {
+			if (!$hook->enabled()) {
 				continue;
 			}
 
-			$runFile = static::$hooks[$hook];
-			if (!file_exists($runFile)) {
-				throw new HookNotFoundException("Hook script for \"{$hook}\" does not exist.");
+			if (!file_exists($hook->path)) {
+				throw new HookNotFoundException("Hook script for \"{$hook->name}\" does not exist.");
 			}
 
-			shell_exec("sh {$runFile} 1>/dev/null 2>&1");
+			shell_exec("sh {$hook->path} 1>/dev/null 2>&1");
 		}
 	}
 
 	public static function disable($hook) {
-		static::$ignore[] = $hook;
+
+		if (array_key_exists($hook, static::$hooks)) {
+			static::$hooks[$hook]->disable();
+		}
 	}
 
-	public static function disableAll() {
-		static::$enabled = false;
-	}
-
-	public static function enableAll() {
+	public static function enableSystem() {
 		static::$enabled = true;
 	}
 
-	public static function isEnabled() {
+	public static function disableSystem() {
+		static::$enabled = false;
+	}
+
+	public static function enabled() {
 		return static::$enabled;
 	}
-	
+
 }

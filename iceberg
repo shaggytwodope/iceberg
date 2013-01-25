@@ -37,7 +37,7 @@ date_default_timezone_set(Config::getVal("general", "timezone", true));
 
 Hook::loadFromFile(__DIR__."/".ICEBERG_HOOK);
 if ($args->no_hook && !$args->no_hook_val) {
-	Hook::disableAll();
+	Hook::disableSystem();
 } else if ($args->no_hook) {
 	$hooks = explode(",", $args->no_hook_val);
 	foreach ($hooks as $hook) {
