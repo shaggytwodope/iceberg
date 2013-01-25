@@ -12,7 +12,6 @@ class Command {
 	private static $namespace = false;
 	
 	public static function setNamespace($namespace) {
-
 		static::$namespace = $namespace;
 	}
 	

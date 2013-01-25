@@ -27,7 +27,6 @@ class Config {
 	}
 
 	public static function setVal($group, $key, $val) {
-
 		static::$values[$group][$key] = $val;
 	}
 

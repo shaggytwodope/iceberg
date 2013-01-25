@@ -11,5 +11,5 @@ COMMANDS & SPECIFIC OPTIONS
 
 GLOBAL OPTIONS
 
-		--config <config path>
-		--no-hook [<hook name[, ...]>]
+	--config <config path>
+	--no-hook [<hook name[, ...]>]
