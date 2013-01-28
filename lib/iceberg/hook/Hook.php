@@ -2,16 +2,17 @@
 
 namespace iceberg\hook;
 
+use iceberg\config\Config;
 use iceberg\hook\HookElement;
-use iceberg\hook\exceptions\InvalidHooksFileException;
+use iceberg\shell\ArgumentParser;
 use iceberg\hook\exceptions\HookNotFoundException;
+use iceberg\hook\exceptions\InvalidHooksFileException;
 
 class Hook {
 
 	public static $enabled = true;
 
-	public static $events = array();
-	public static $hooks = array();
+	public static $events = array(), $hooks = array(), $env = array();
 
 	public static function loadFromFile($filePath) {
 
@@ -46,6 +47,8 @@ class Hook {
 			return;
 		}
 
+		$arguments = ArgumentParser::getInstance();
+
 		foreach (static::$events[$event] as $hook) {
 			
 			if (!$hook->enabled()) {
@@ -56,15 +59,27 @@ class Hook {
 				throw new HookNotFoundException("Hook script for \"{$hook->name}\" does not exist.");
 			}
 
-			shell_exec("sh {$hook->path} 1>/dev/null 2>&1");
+			$hookArguments = array();
+			foreach ($hook->data as $dataPiece) {
+				// I'll do stuff here later :3
+			}
+
+			$hookArgumentString = implode(" ", $hookArguments);
+			shell_exec("sh {$hook->path} {$hookArgumentString} 1>/dev/null 2>&1");
 		}
 	}
 
-	public static function disable($hook) {
+	public static function setEnvironmentData($event, $dataName, $dataContent) {
+		static::$env[$event] = $dataContent;
+	}
 
-		if (array_key_exists($hook, static::$hooks)) {
-			static::$hooks[$hook]->disable();
+	public static function disableHook($hook) {
+
+		if (!array_key_exists($hook, static::$hooks)) {
+			return;
 		}
+
+		static::$hooks[$hook]->disable();
 	}
 
 	public static function enableSystem() {

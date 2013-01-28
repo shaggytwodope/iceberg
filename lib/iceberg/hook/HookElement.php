@@ -6,24 +6,17 @@ class HookElement {
 
 	public $enabled = true;
 
-	public function __construct($name, $event, $path, $data = array()) {
+	public $name, $event, $path, $data = array();
 
+	public function __construct($name, $event, $path) {
 		$this->name = $name;
 		$this->event = $event;
 		$this->path = $path;
-		$this->data = $data;
 	}
 
-	public function enable() {
-		$this->enabled = true;
-	}
+	public function enable() { $this->enabled = true; }
 
-	public function disable() {
-		$this->enabled = false;
-	}
+	public function disable() { $this->enabled = false; }
 
-	public function enabled() {
-		return $this->enabled;
-	}
-
+	public function enabled() { return $this->enabled; }
 }

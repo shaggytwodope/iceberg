@@ -8,6 +8,7 @@ use DateTimeZone;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 
+use iceberg\hook\Hook;
 use iceberg\config\Config;
 use iceberg\cmd\AbstractCommand;
 use iceberg\shell\ArgumentParser;
@@ -117,7 +118,12 @@ class Generate extends AbstractCommand {
 		$layoutParser = new Twig_Environment($layoutLoader);
 		$layoutRendered = $layoutParser->render(end(explode("/", $layoutFilePath)), (array) $article);
 
-		file_put_contents($outputFilePath, $layoutRendered);
+		$outputFileWritten = @file_put_contents($outputFilePath, $layoutRendered);
+		if (!$outputFileWritten) {
+			throw new InvalidInputException("Could not write generate output to file.");
+		}
+
+		Hook::setEnvironmentData("generate", "article", $article);
 	}
 
 }

@@ -1,7 +1,12 @@
 {
-	"example-hook": {
-		"path": "lib/hooks/example-hook",
-		"event": "pre-generate",
-		"data": []
+	"copy-assets": {
+		"path": "lib/hooks/copy-assets",
+		"event": "post-generate",
+		"data": [
+			"@config:assets:input",
+			"@config:assets:output",
+			"@arguments:force-assets",
+			"article:slug"
+		]
 	}
 }

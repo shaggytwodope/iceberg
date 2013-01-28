@@ -21,27 +21,31 @@ if (!ini_get("date.timezone")) {
 	date_default_timezone_set("Europe/Berlin");
 }
 
-ErrorHandler::register(__DIR__."/".ICEBERG_LOG);
+ErrorHandler::register(ICEBERG_LOG);
 
 Twig_Autoloader::register();
 
 Autoloader::register();
-Autoloader::addNamespace("iceberg", __DIR__."/lib/iceberg");
-Autoloader::addNamespace("commands", __DIR__."/lib");
+Autoloader::addNamespace("iceberg", "lib/iceberg");
+Autoloader::addNamespace("commands", "lib");
 
 $args = ArgumentParser::getInstance();
 
-Config::loadFromFile($args->config_val ? $args->config_val : __DIR__."/".ICEBERG_CONFIG);
+Config::loadFromFile(
+	$args->config_val ? $args->config_val : ICEBERG_CONFIG
+);
 
-date_default_timezone_set(Config::getVal("general", "timezone", true));
+date_default_timezone_set(
+	Config::getVal("general", "timezone", true)
+);
 
-Hook::loadFromFile(__DIR__."/".ICEBERG_HOOK);
+Hook::loadFromFile(ICEBERG_HOOK);
 if ($args->no_hook && !$args->no_hook_val) {
 	Hook::disableSystem();
 } else if ($args->no_hook) {
 	$hooks = explode(",", $args->no_hook_val);
 	foreach ($hooks as $hook) {
-		Hook::disable($hook);
+		Hook::disableHook($hook);
 	}
 }
 
