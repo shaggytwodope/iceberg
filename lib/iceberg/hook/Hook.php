@@ -3,11 +3,11 @@
 namespace iceberg\hook;
 
 use iceberg\config\Config;
-use iceberg\hook\HookElement;
 use iceberg\shell\ArgumentParser;
 use iceberg\hook\exceptions\HookNotFoundException;
 use iceberg\hook\exceptions\InvalidHooksFileException;
 
+class Object { }
 class Hook {
 
 	public static $enabled = true;
@@ -31,12 +31,12 @@ class Hook {
 			if (!$hook->path || !$hook->event) {
 				throw new InvalidHooksFileException("Hook data file is incomplete for \"{$name}\".");
 			}
-			
-			static::$hooks[$name] = new HookElement($name, $hook->event, $hook->path);
-			if ($hook->data) {
-				static::$hooks[$name]->data = (array) $hook->data;
-			}
 
+			$hook->enabled = true;
+			$hook->output = (isset($hook->output) && !$hook->output) ? false : true;
+			$hook->data = ($hook->data) ? (array) $hook->data : array();
+
+			static::$hooks[$name] = $hook;
 			static::$events[$hook->event][] = &static::$hooks[$name];
 		}
 	}
@@ -51,7 +51,7 @@ class Hook {
 
 		foreach (static::$events[$event] as $hook) {
 			
-			if (!$hook->enabled()) {
+			if (!$hook->enabled) {
 				continue;
 			}
 
@@ -65,7 +65,11 @@ class Hook {
 			}
 
 			$hookArgumentString = implode(" ", $hookArguments);
-			shell_exec("sh {$hook->path} {$hookArgumentString} 1>/dev/null 2>&1");
+			$execOutput = shell_exec("sh {$hook->path} {$hookArgumentString}");
+
+			if ($hook->output) {
+				echo $execOutput;
+			}
 		}
 	}
 
@@ -79,7 +83,7 @@ class Hook {
 			return;
 		}
 
-		static::$hooks[$hook]->disable();
+		static::$hooks[$hook]->enabled = false;
 	}
 
 	public static function enableSystem() {

@@ -2,6 +2,7 @@
 	"copy-assets": {
 		"path": "lib/hooks/copy-assets",
 		"event": "post-generate",
+		"output": true,
 		"data": [
 			"@config:assets:input",
 			"@config:assets:output",
