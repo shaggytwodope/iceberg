@@ -2,7 +2,7 @@
 
 class Twig_Extension_Variables extends Twig_Extension {
 
-	public $data;
+	public $data = array();
 
 	public function getName() { 
 		return "variables"; 
@@ -10,14 +10,14 @@ class Twig_Extension_Variables extends Twig_Extension {
 
 	public function getFunctions() {
 		return array(
-			"_set" => new Twig_Function_Method($this, "_set")
+			"set" => new Twig_Function_Method($this, "set")
 		);
 	}
-	public function _set($name, $value) { 
+	public function set($name, $value) {
 		$this->data[$name] = $value;
 	}
 
-	public function _get($name) {
+	public function get($name) {
 		return $this->data[$name];
 	}
 

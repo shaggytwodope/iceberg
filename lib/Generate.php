@@ -125,8 +125,6 @@ class Generate extends AbstractCommand {
 			(array) $article
 		);
 
-		var_dump($templateVariables->data);
-
 		$outputFileWritten = @file_put_contents($outputFilePath, $layoutRendered);
 		if (!$outputFileWritten) {
 			throw new InvalidInputException("Could not write generated output to file.");
