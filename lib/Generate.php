@@ -2,11 +2,13 @@
 
 namespace commands;
 
+use stdClass;
 use DateTime;
 use DateTimeZone;
 
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Twig_Extension_Variables;
 
 use iceberg\hook\Hook;
 use iceberg\config\Config;
@@ -20,7 +22,7 @@ use iceberg\cmd\exceptions\InputFileNotGivenException;
 use iceberg\layout\exceptions\LayoutNotGivenException;
 use iceberg\layout\exceptions\LayoutFileDoesNotExistException;
 
-class Object { }
+class Object extends stdClass { }
 class Generate extends AbstractCommand {
 
 	public static function run() {
@@ -112,18 +114,25 @@ class Generate extends AbstractCommand {
 			throw new LayoutFileDoesNotExistException("Layout file does not exist.");
 		}
 
-		$layoutDirectory = dirname($layoutFilePath);
-		$layoutLoader = new Twig_Loader_Filesystem($layoutDirectory);
+		$templateVariables = new Twig_Extension_Variables;
 
+		$layoutLoader = new Twig_Loader_Filesystem(dirname($layoutFilePath));
 		$layoutParser = new Twig_Environment($layoutLoader);
-		$layoutRendered = $layoutParser->render(end(explode("/", $layoutFilePath)), (array) $article);
+		$layoutParser->addExtension($templateVariables);
+
+		$layoutRendered = $layoutParser->render(
+			end(explode("/", $layoutFilePath)),
+			(array) $article
+		);
+
+		var_dump($templateVariables->data);
 
 		$outputFileWritten = @file_put_contents($outputFilePath, $layoutRendered);
 		if (!$outputFileWritten) {
-			throw new InvalidInputException("Could not write generate output to file.");
+			throw new InvalidInputException("Could not write generated output to file.");
 		}
 
-		Hook::setEnvironmentData("generate", "article", $article);
+		Hook::setEnvironmentData("article", $article);
 	}
 
 }

@@ -73,8 +73,13 @@ class Hook {
 		}
 	}
 
-	public static function setEnvironmentData($event, $dataName, $dataContent) {
-		static::$env[$event] = $dataContent;
+	public static function setEnvironmentData($dataName, $dataContent) {
+
+		if (is_object($dataContent)) {
+			$dataContent = (array) $dataContent;
+		}
+
+		static::$env[$dataName] = $dataContent;
 	}
 
 	public static function disableHook($hook) {
