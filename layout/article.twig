@@ -1,9 +1,13 @@
 {% extends "base.twig" %}
 
+{% block vars %}
+	{{ set("output", "article/{slug}/index.html") }}
+{% endblock %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block meta %} {{ parent() }}
-			<meta name="author" content="{{ title }}">{% endblock %}
+			<meta name="author" content="{{ author }}">{% endblock %}
 
 {% block page %}
 			<article>

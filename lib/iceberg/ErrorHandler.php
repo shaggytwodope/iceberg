@@ -25,7 +25,7 @@ class ErrorHandler {
 
 		$logMessage = "[".date(DATE_RFC822)."] {$name} : {$message}\n";
 		
-		if (static::$logPath && $log) {
+		if (static::$logPath) {
 			fwrite(static::$logPath, $logMessage);
 		}
 		

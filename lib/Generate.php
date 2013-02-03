@@ -7,6 +7,7 @@ use DateTime;
 use DateTimeZone;
 
 use Twig_Environment;
+use Twig_SimpleFunction;
 use Twig_Loader_Filesystem;
 use Twig_Extension_Variables;
 
@@ -79,22 +80,6 @@ class Generate extends AbstractCommand {
 
 		switch (true) {
 
-			case $arguments->output_val:
-				$outputFilePath = $arguments->output;
-				break;
-
-			case isset($article->output):
-				$outputFilePath = $article->output;
-				break;
-
-			default:
-				$outputFilePath = str_replace("{slug}", $article->slug, Config::getVal("article", "output", true));
-				break;
-		}
-		@mkdir(dirname($outputFilePath), 0777, true);
-
-		switch (true) {
-
 			case $arguments->layout_val:
 				$layoutFile = $argument->layout;
 				break;
@@ -106,7 +91,6 @@ class Generate extends AbstractCommand {
 			default:
 				throw new LayoutNotGivenException("Layout to be used was not given.");
 				break;
-
 		}
 
 		$layoutFilePath = str_replace("{layout}", $layoutFile, Config::getVal("article", "layout", true));
@@ -114,16 +98,34 @@ class Generate extends AbstractCommand {
 			throw new LayoutFileDoesNotExistException("Layout file does not exist.");
 		}
 
-		$templateVariables = new Twig_Extension_Variables;
+		$variables = new Twig_Extension_Variables;
 
 		$layoutLoader = new Twig_Loader_Filesystem(dirname($layoutFilePath));
 		$layoutParser = new Twig_Environment($layoutLoader);
-		$layoutParser->addExtension($templateVariables);
+		$layoutParser->addExtension($variables);
 
-		$layoutRendered = $layoutParser->render(
-			end(explode("/", $layoutFilePath)),
-			(array) $article
-		);
+		$layoutRendered = $layoutParser->render(end(explode("/", $layoutFilePath)), (array) $article);
+
+		switch (true) {
+
+			case $arguments->output_val:
+				$outputFilePath = $arguments->output;
+				break;
+
+			case isset($article->output):
+				$outputFilePath = $article->output;
+				break;
+
+			default:
+				if (!isset($variables->data["output"])) {
+					throw new InvalidInputException("Output file path was not defined in the template.");
+				}
+
+				$outputFilePath = Config::getVal("article", "output", true);
+				$outputFilePath .= str_replace("{slug}", $article->slug, $variables->data["output"]);
+				break;
+		}
+		@mkdir(dirname($outputFilePath), 0777, true);
 
 		$outputFileWritten = @file_put_contents($outputFilePath, $layoutRendered);
 		if (!$outputFileWritten) {
