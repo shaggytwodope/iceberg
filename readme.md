@@ -22,19 +22,27 @@ $ ./iceberg generate --name post --no-hook
 
 ### Configuration
 
-The configuration for iceberg is set in the ``config.ini`` file, and as you'll have guessed, it's in ``ini`` format. If you wish, you can pass Iceberg a different config file by using the ``--config <file path>`` argument. The following config values are required for Iceberg to work (note that the default config file also contains some extra settings. Those are used by [hooks](#hooks)):
+The configuration for iceberg is set in the ``config.ini`` file, and as you'll have guessed, it's in ``ini`` format. If you wish, you can pass Iceberg a different config file by using the ``--config <file path>`` argument. Here are the default and required config values:
 
 ```ini
 [general]
 
-timezone = Europe/Berlin            ; your timezone (see http://php.net/manual/en/timezones.php for valid timezones)
-author = John Appleseed             ; the name of the default author (can be overwritten in articles)
+; your timezone (see http://php.net/manual/en/timezones.php for valid timezones)
+timezone = Europe/Berlin
+
+; the name of the default author (can be overwritten in articles)            
+author = John Appleseed
 
 [article]
 
-input = posts/{article}.md          ; the path to your post **file** ({article} will be replaced with the post name)
-layout = layout/{layout}.twig       ; the path to your layout **file** ({layout} will be replaced with the layout name)
-output = output/                    ; the root path for the output followed by a trailing slash
+; the path to a post file ({article} will be replaced with the post name)
+input = posts/{article}.md
+
+; the path to a layout file ({layout} will be replaced with the layout name)
+layout = layout/{layout}.twig
+
+; the root path for the output followed by a trailing slash       
+output = output/
 ```
 
 ## Manual
