@@ -27,14 +27,14 @@ The configuration for iceberg is set in the ``config.ini`` file, and as you'll h
 ```ini
 [general]
 
-timezone = Europe/Berlin            # your timezone (see http://php.net/manual/en/timezones.php for valid timezones)
-author = John Appleseed             # the name of the default author (can be overwritten in articles)
+timezone = Europe/Berlin            ; your timezone (see http://php.net/manual/en/timezones.php for valid timezones)
+author = John Appleseed             ; the name of the default author (can be overwritten in articles)
 
 [article]
 
-input = posts/{article}.md          # the path to your post **file** ({article} will be replaced with the post name)
-layout = layout/{layout}.twig       # the path to your layout **file** ({layout} will be replaced with the layout name)
-output = output/                    # the root path for the output followed by a trailing slash
+input = posts/{article}.md          ; the path to your post **file** ({article} will be replaced with the post name)
+layout = layout/{layout}.twig       ; the path to your layout **file** ({layout} will be replaced with the layout name)
+output = output/                    ; the root path for the output followed by a trailing slash
 ```
 
 ## Manual
