@@ -95,7 +95,7 @@ class Generate extends AbstractCommand {
 
 		$layoutFilePath = str_replace("{layout}", $layoutFile, Config::getVal("article", "layout", true));
 		if (!file_exists($layoutFilePath)) {
-			throw new LayoutFileDoesNotExistException("Layout file does not exist.");
+			throw new LayoutFileDoesNotExistException("Layout file \"{$layoutFilePath}\" does not exist.");
 		}
 
 		$variables = new Twig_Extension_Variables;
@@ -118,7 +118,7 @@ class Generate extends AbstractCommand {
 
 			default:
 				if (!isset($variables->data["output"])) {
-					throw new InvalidInputException("Output file path was not defined in the template.");
+					throw new InvalidInputException("Output path for template \"{$layoutFile}\" was not defined.");
 				}
 
 				$outputFilePath = Config::getVal("article", "output", true);
@@ -129,8 +129,10 @@ class Generate extends AbstractCommand {
 
 		$outputFileWritten = @file_put_contents($outputFilePath, $layoutRendered);
 		if (!$outputFileWritten) {
-			throw new InvalidInputException("Could not write generated output to file.");
+			throw new InvalidInputException("Could not write generated output for \"{$article->title}\" to file.");
 		}
+
+		echo "=> Generated \"{$article->title}\" at path \"{$outputFilePath}\"\n";
 
 		Hook::setEnvironmentData("article", $article);
 	}
