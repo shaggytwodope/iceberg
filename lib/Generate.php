@@ -2,6 +2,7 @@
 
 namespace commands;
 
+use SQLite3;
 use stdClass;
 use DateTime;
 use DateTimeZone;
@@ -29,6 +30,8 @@ class Generate extends AbstractCommand {
 	public static function run() {
 
 		$arguments = ArgumentParser::getInstance();
+
+		$database = new SQLite3(Config::getVal("general", "database", true));
 		
 		switch (true) {
 			case $arguments->file_val:
@@ -55,7 +58,11 @@ class Generate extends AbstractCommand {
 
 		preg_match_all("/@([a-zA-Z]+):\s(.*)\n?/", $inputFileContent, $metadata, PREG_SET_ORDER);
 		foreach ($metadata as $detail) {
-			$article->$detail[1] = trim($detail[2]);
+			$article->{$detail[1]} = trim($detail[2]);
+		}
+
+		if (!isset($article->uid)) {
+			throw new InputDataNotFoundException("Article does not have a unique ID.");
 		}
 
 		if (!isset($article->title)) {

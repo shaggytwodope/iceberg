@@ -7,7 +7,6 @@ use iceberg\shell\ArgumentParser;
 use iceberg\hook\exceptions\HookNotFoundException;
 use iceberg\hook\exceptions\InvalidHooksFileException;
 
-class Object { }
 class Hook {
 
 	public static $enabled = true;
