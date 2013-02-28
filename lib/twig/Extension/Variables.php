@@ -2,23 +2,22 @@
 
 class Twig_Extension_Variables extends Twig_Extension {
 
-	public $data = array();
+	public $functions = array();
 
 	public function getName() { 
-		return "variables"; 
+		return "variables";
+	}
+
+	public function register($function) {
+		$this->functions[$function] = new Twig_Function_Method($this, $function);
 	}
 
 	public function getFunctions() {
-		return array(
-			"set" => new Twig_Function_Method($this, "set")
-		);
-	}
-	public function set($name, $value) {
-		$this->data[$name] = $value;
+		return $this->functions;
 	}
 
-	public function get($name) {
-		return $this->data[$name];
+	public function __call($function, $arguments) {
+		$this->{$function} = $arguments[0];
 	}
 
 }

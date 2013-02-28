@@ -106,12 +106,21 @@ class Generate extends AbstractCommand {
 		}
 
 		$variables = new Twig_Extension_Variables;
+		$variables->register("_output");
+		$variables->register("_reload");
 
 		$layoutLoader = new Twig_Loader_Filesystem(dirname($layoutFilePath));
 		$layoutParser = new Twig_Environment($layoutLoader);
 		$layoutParser->addExtension($variables);
 
-		$layoutRendered = $layoutParser->render(end(explode("/", $layoutFilePath)), (array) $article);
+		$layoutData = array(
+			"articles" => (array) $article,
+			"config" => Config::_getValues(),
+		);
+
+		$layoutRendered = $layoutParser->render(basename($layoutFilePath), $layoutData);
+
+		$outputFilePathRoot = Config::getVal("article", "output", true);
 
 		switch (true) {
 
@@ -124,12 +133,11 @@ class Generate extends AbstractCommand {
 				break;
 
 			default:
-				if (!isset($variables->data["output"])) {
+				if (!isset($variables->_output)) {
 					throw new InvalidInputException("Output path for template \"{$layoutFile}\" was not defined.");
 				}
 
-				$outputFilePath = Config::getVal("article", "output", true);
-				$outputFilePath .= str_replace("{slug}", $article->slug, $variables->data["output"]);
+				$outputFilePath = $outputFilePathRoot.str_replace("{slug}", $article->slug, $variables->_output);
 				break;
 		}
 		@mkdir(dirname($outputFilePath), 0777, true);
@@ -139,7 +147,30 @@ class Generate extends AbstractCommand {
 			throw new InvalidInputException("Could not write generated output for \"{$article->title}\" to file.");
 		}
 
-		echo "=> Generated \"{$article->title}\" at path \"{$outputFilePath}\"\n";
+		$layoutFilePath = basename($layoutFilePath);
+		echo "=> Generated \"{$layoutFilePath}\" at path \"{$outputFilePath}\"\n";
+
+		if (isset($variables->_reload) && is_array($variables->_reload)) {
+
+			foreach ($variables->_reload as $file) {
+
+				if (!array_key_exists("layout", $file) || !array_key_exists("output", $file)) {
+					throw new InvalidInputException("Invalid or missing layout reloading data in \"{$layoutFilePath}\".");
+				}
+
+				$layoutFilePath = $file["layout"];
+				$outputFilePath = $outputFilePathRoot.$file["output"];
+
+				$layoutRendered = $layoutParser->render($layoutFilePath, $layoutData);
+
+				$outputFileWritten = @file_put_contents($outputFilePath, $layoutRendered);
+				if (!$outputFileWritten) {
+					throw new InvalidInputException("Could not write generated output for \"{$layoutFilePath}\" to file.");
+				}
+
+				echo "=> Generated \"{$layoutFilePath}\" at path \"{$outputFilePath}\"\n";
+			}
+		}
 
 		Hook::setEnvironmentData("article", $article);
 	}

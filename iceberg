@@ -1,6 +1,8 @@
 #! /usr/bin/php
 <?php
 
+error_reporting(E_ALL);
+
 define("ICEBERG_LOG", "iceberg.log");
 define("ICEBERG_CONFIG", "config.ini");
 define("ICEBERG_HOOK", "hooks.json");

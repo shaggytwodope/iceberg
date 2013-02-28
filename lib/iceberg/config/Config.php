@@ -43,4 +43,8 @@ class Config {
 		return static::$values[$group][$key];
 	}
 
+	public static function _getValues() {
+		return static::$values;
+	}
+
 }

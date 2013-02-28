@@ -8,8 +8,7 @@ Iceberg is written in PHP, and you'll need PHP 5.3 or higher for it work properl
 $ git clone	git://github.com/cyrilmengin/iceberg.git website
 ```
 
-You might get an error when trying to run the ``iceberg`` executable, something along the lines of ``iceberg: Permission denied``. This means that your shell isn't recognizing the executable, so you'll have to ``chmod +x iceberg`` it.
-
+You might get an error when trying to run the ``iceberg`` executable, something along the lines of ``iceberg: Permission denied``. This means that your shell isn't recognizing the executable, so you'll have to ``chmod +x iceberg`` it to make it a proper executable file.
 
 ### Usage
 
@@ -39,11 +38,9 @@ database = articles.sqlite
 input = posts/{article}.md
 ; the path to layout files. the {layout} will be replaced with the layout name.
 layout = layout/{layout}.twig
-; the output root directory path. it should preferably have a trailing slash.
+; the path to the output directory. it should preferably have a trailing slash.
 output = output/
 ```
-
-*Note that the default iceberg config files contains some extra settings. That is normal, and those extra config items are used by hooks.
 
 ## Manual
 
