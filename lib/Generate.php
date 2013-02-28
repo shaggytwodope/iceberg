@@ -114,7 +114,7 @@ class Generate extends AbstractCommand {
 		$layoutParser->addExtension($variables);
 
 		$layoutData = array(
-			"articles" => (array) $article,
+			"article" => (array) $article,
 			"config" => Config::_getValues(),
 		);
 
